@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: july-backend
+    runtime: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CORS_ORIGIN
+        value: https://july-frontend.onrender.com
+      - key: DB_HOST
+        fromDatabase:
+          name: july-database
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: july-database
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: july-database
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: july-database
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: july-database
+          property: password
+
+  - type: web
+    name: july-frontend
+    runtime: static
+    buildCommand: cd july && npm install && npm run build
+    staticPublishPath: ./july/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://july-backend.onrender.com/api
+
+databases:
+  - name: july-database
+    databaseName: july_finance
+    user: july_user
