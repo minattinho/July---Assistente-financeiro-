@@ -24,7 +24,7 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === "production"
-        ? ["https://seu-dominio.com"]
+        ? [process.env.CORS_ORIGIN || "https://seu-app.vercel.app"]
         : ["http://localhost:5173", "http://localhost:3000"],
     credentials: true,
   })
